@@ -5,7 +5,7 @@ using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace miniprojekt.Core1;
+namespace Core1;
 
 public class Order
 {

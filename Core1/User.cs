@@ -29,7 +29,7 @@ namespace Core1
         public string Email { get; set; }
         [Required]
         public List<Listing> Listings { get; set; } = new List<Listing>();
-        public List<Order> Orders { get; set; } = new List<Order>();
+        public List<Order   > Orders { get; set; } = new List<Order>();
 
         public User(string username, string password, string firstname, string lastname, string email)
         {
