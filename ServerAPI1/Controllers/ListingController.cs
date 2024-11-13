@@ -1,7 +1,8 @@
 ﻿using System.Reflection;
 using Core1;
 using ServerAPI1.Repositories;
-
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace ServerAPI1.Controllers
 {
