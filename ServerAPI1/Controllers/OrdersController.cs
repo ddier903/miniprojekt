@@ -7,6 +7,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using miniprojekt.Repositories;
 
 namespace ServerAPI1.Controllers
 {

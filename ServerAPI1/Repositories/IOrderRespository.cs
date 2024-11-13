@@ -3,7 +3,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using System.Collections.Generic;
-using miniprojekt.Core1;
+using Core1;
 
 namespace miniprojekt.Repositories;
 

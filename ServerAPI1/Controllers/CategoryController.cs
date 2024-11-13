@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using Core1;
 using Microsoft.AspNetCore.Mvc;
 using ServerAPI1.Repositories;
 using MongoDB.Bson;
@@ -7,7 +6,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using 
+using Core1;
 
 namespace ServerAPI1.Controllers;
 
@@ -47,7 +46,7 @@ namespace ServerAPI1.Controllers;
         [HttpPost]
         public ActionResult<Category> AddCategory(Category category)
         {
-            _categoryRepository.add(category); //  Tilføjer den nye kategori til repository.
+            _categoryRepository.Add(category); //  Tilføjer den nye kategori til repository.
             return CreatedAtAction(nameof(GetCategoryById), new { id = category.Id }, category);
         }
 
@@ -60,7 +59,7 @@ namespace ServerAPI1.Controllers;
                 return NotFound();
             }
             category.Id = existingCategory.Id; // sikrer at id på kategori-objektet ikke ændres under opdatering 
-            _categoryRepository.update(category); // opdater kategorien i repository
+            _categoryRepository.Update(category); // opdater kategorien i repository
             return NoContent();
         }
 
@@ -73,7 +72,7 @@ namespace ServerAPI1.Controllers;
                 return NotFound();
             }
 
-            _categoryRepository.delete(id); // sletter kategorien fra repository 
+            _categoryRepository.Delete(id); // sletter kategorien fra repository 
             return NoContent();
         }
     }
