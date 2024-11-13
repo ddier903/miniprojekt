@@ -47,7 +47,7 @@ namespace ServerAPI1.Controllers;
         public ActionResult<Category> AddCategory(Category category)
         {
             _categoryRepository.Add(category); //  Tilføjer den nye kategori til repository.
-            return CreatedAtAction(nameof(GetCategoryById), new { id = category.Id }, category);
+            return CreatedAtAction(nameof(GetCategoryById), new { id = category.CategoryId }, category);
         }
 
         [HttpPut("{id}")]
@@ -58,7 +58,7 @@ namespace ServerAPI1.Controllers;
             {
                 return NotFound();
             }
-            category.Id = existingCategory.Id; // sikrer at id på kategori-objektet ikke ændres under opdatering 
+            category.CategoryId = existingCategory.CategoryId; // sikrer at id på kategori-objektet ikke ændres under opdatering 
             _categoryRepository.Update(category); // opdater kategorien i repository
             return NoContent();
         }
