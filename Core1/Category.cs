@@ -12,11 +12,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 
-namespace Core1;
 
-public class Order
+namespace Core1;
+public class Category
 {
-    public ObjectId OrderId { get; set; }
-    public Listing Listing { get; set; }
-    public DateTime OrderDate { get; set; }
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
 }

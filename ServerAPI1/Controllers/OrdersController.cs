@@ -10,8 +10,6 @@ using System.Threading.Tasks;
 
 namespace ServerAPI1.Controllers
 {
-    namespace miniprojekt.Controllers
-    {
         [ApiController]
         [Route("api/[controller]")]
         public class OrderController : ControllerBase
@@ -74,4 +72,3 @@ namespace ServerAPI1.Controllers
             }
         }
     }
-}
