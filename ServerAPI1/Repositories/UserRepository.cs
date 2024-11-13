@@ -35,7 +35,7 @@ namespace ServerAPI1.Repositories
         public async Task<List<User>> GetAllUsers()
         {
             var filter = Builders<User>.Filter.Empty;
-            return await collection.Find(filter).ToList();
+            return await collection.Find(filter).ToListAsync();
         }
     }
 }
