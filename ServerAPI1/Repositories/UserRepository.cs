@@ -24,7 +24,7 @@ namespace ServerAPI1.Repositories
 
             database = mongoClient.GetDatabase("Gruppe1");
 
-            collection = database.GetCollection<User>("Users");
+            collection = database.GetCollection<User>("User");
         }
 
         //Tilføjer User til database

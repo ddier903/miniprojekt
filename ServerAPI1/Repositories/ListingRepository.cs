@@ -24,7 +24,7 @@ namespace ServerAPI1.Repositories
 
             database = mongoClient.GetDatabase("Gruppe1");
 
-            collection = database.GetCollection<Listing>("Listings");
+            collection = database.GetCollection<Listing>("Listing");
         }
 
         //Tilføjer en Ny Listing. 
