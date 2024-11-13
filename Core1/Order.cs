@@ -16,9 +16,7 @@ namespace Core1;
 
 public class Order
 {
-    public int UserId { get; set; }
-    public int OrderId { get; set; }
-    public int ListingId { get; set; }
+    public ObjectId OrderId { get; set; }
+    public Listing Listing { get; set; }
     public DateTime OrderDate { get; set; }
-    public int Price { get; set; }
 }
