@@ -70,11 +70,11 @@ namespace ServerAPI1.Repositories
         }
 
         //Viser annoncer baseret på navn som søgeord
-        public async Task<List<Listing>> GetListingBySearch(string search)
+        /*public async Task<List<Listing>> GetListingBySearch(string search)
         {
 
-            return;
-        }
+            
+        }*/
 
         //Viser Aktive listings for en specifik bruger:
 

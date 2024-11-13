@@ -25,7 +25,7 @@ namespace Core1
         public string CategoryName { get; set; }
 
         [Required]
-        public string UserName { get; set; }
+        public ObjectId UserId { get; set; }
 
     }
 }
