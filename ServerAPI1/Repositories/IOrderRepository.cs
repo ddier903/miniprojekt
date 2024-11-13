@@ -4,16 +4,19 @@ using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using miniprojekt.Core1;
+using Core1;
 
-namespace miniprojekt.Repositories;
+namespace ServerAPI1.Repositories
+{
 
 
 // Opretter Order interface og definer CRUD metoder for Order klassen
-public interface IOrderRepository
-{
-    IEnumerable<Order> GetAll();
-    Order GetById(int id);
-    void Add(Order order);
-    void Update(Order order);
-    void Delete(Order order);
+    public interface IOrderRepository
+    {
+        IEnumerable<Order> GetAll();
+        Order GetById(int id);
+        void Add(Order order);
+        void Update(Order order);
+        void Delete(Order order);
+    }
 }
