@@ -1,8 +1,11 @@
 ﻿using Core1;
 using ServerAPI1.Repositories;
+using Microsoft.AspNetCore.Mvc;
+namespace ServerAPI1.Controllers;
 
-namespace ServerAPI1.Controllers
-{
+    [ApiController]
+    [Route("/Listing")]
+
     public class UserController
     {
         UserRepository repository;
@@ -10,13 +13,15 @@ namespace ServerAPI1.Controllers
         {
             repository = new UserRepository();
         }
-
+        [HttpGet]
+        [Route("GetAllUsers")]
         public IEnumerable<User> GetAllUsers()
         {
             return (IEnumerable<User>)repository.GetAllUsers();
         }
-
-        public async Task AddUser(User user)
+        [HttpGet]
+        [Route("AddUser")]
+    public async Task AddUser(User user)
         {
             await repository.AddUser(user);
 
@@ -25,4 +30,4 @@ namespace ServerAPI1.Controllers
 
 
     }
-}
+
