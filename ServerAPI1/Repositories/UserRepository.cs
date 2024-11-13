@@ -1,17 +1,22 @@
 ﻿using Core1;
 using ServerAPI1.Controllers;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ServerAPI1.Repositories
 {
     public class UserRepository
     {
-        private string connectionString = "mongodb://localhost:27017";
+        private string connectionString = "mongodb://Gruppe1:<AD6RU8wHaOtQv8vH>@undefined/?replicaSet=atlas-7nlzsu-shard-0&ssl=true&authSource=admin";
 
         IMongoClient mongoClient;
 
         IMongoDatabase database;
 
-        IMongoCollection<Customer> collection;
+        IMongoCollection<User> collection;
 
         public UserRepository()
         {
