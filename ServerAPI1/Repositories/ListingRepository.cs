@@ -64,7 +64,7 @@ namespace ServerAPI1.Repositories
             var filter = Builders<Listing>.Filter.Empty;
             var list = await collection
                 .Find(filter)
-                .SortByDAscending(listing => listing.Price)
+                .SortBy(listing => listing.Price)
                 .ToListAsync();
             return list;
         }
