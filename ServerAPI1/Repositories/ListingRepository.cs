@@ -51,7 +51,9 @@ namespace ServerAPI1.Repositories
         //Viser alle listings sorteret på pris faldende.
         public async Task<List<Listing>> GetListingByPriceDescending()
         {
-            var list = await collection.Aggregate()
+            var filter = Builders<Listing>.Filter.Empty;
+            var list = await collection
+                .Find(filter)
                 .SortByDescending(listing => listing.Price)
                 .ToListAsync();
             return list;
@@ -59,8 +61,10 @@ namespace ServerAPI1.Repositories
         //Viser alle listings sorteret på pris stigende.
         public async Task<List<Listing>> GetListingByPriceAscending()
         {
-            var list = await collection.Aggregate()
-                .SortByAscending(listing => listing.Price)
+            var filter = Builders<Listing>.Filter.Empty;
+            var list = await collection
+                .Find(filter)
+                .SortByDAscending(listing => listing.Price)
                 .ToListAsync();
             return list;
         }

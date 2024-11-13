@@ -27,11 +27,13 @@ namespace ServerAPI1.Repositories
             collection = database.GetCollection<User>("Users");
         }
 
+        //Tilføjer User til database
         public async Task AddUser(User user)
         {
             await collection.InsertOneAsync(user);
         }
 
+        //Henter alle users
         public async Task<List<User>> GetAllUsers()
         {
             var filter = Builders<User>.Filter.Empty;
