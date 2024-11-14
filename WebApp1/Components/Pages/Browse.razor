@@ -1,0 +1,132 @@
+﻿@page "/Browse"
+@inject HttpClient Http // Injects the HttpClient to communicate with the API
+@using Core1;
+
+<h3>Browse Products</h3>
+
+<!-- Section for adding a new product -->
+<div>
+    <h4>Add a New Product</h4>
+
+    <!-- Form to add a new listing -->
+    <EditForm Model="@newListing" OnValidSubmit="@SubmitListing">
+        <DataAnnotationsValidator /> <!-- Enables validation based on the Listing class -->
+        <ValidationSummary /> <!-- Displays validation errors -->
+        <!-- Input fields for listing details -->
+        <div>
+            <label>Name:</label>
+            <input @bind="newListing.Name" class="form-control" />
+        </div>
+
+        <div>
+            <label>Price:</label>
+            <input type="number" @bind="newListing.Price" class="form-control" />
+        </div>
+
+        <div>
+            <label>Description:</label>
+            <textarea @bind="newListing.Description" class="form-control"></textarea>
+        </div>
+
+        <div>
+            <label>Category:</label>
+            <input @bind="newListing.CategoryName" class="form-control" />
+        </div>
+
+        <div>
+            <label>Image URL:</label>
+            <input @bind="newListing.Image" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Product</button>
+    </EditForm>
+</div>
+
+<hr />
+
+<!-- Section for viewing all listings -->
+<h4>Available Products</h4>
+
+@if (listings == null)
+{
+    <!-- Displays while loading data -->
+    <p>Loading listings...</p>
+}
+else if (listings.Count == 0)
+{
+    <!-- Displays if no listings are available -->
+    <p>No listings available.</p>
+}
+else
+{
+    <!-- Grid layout for displaying all listings -->
+    <div class="product-grid">
+        @foreach (var listing in listings)
+        {
+            <div class="product-card">
+                <img src="@listing.Image" alt="@listing.Name" class="product-image" />
+                <h5>@listing.Name</h5>
+                <p>@listing.Description</p>
+                <p><strong>Price:</strong> $@listing.Price</p>
+                <p><strong>Category:</strong> @listing.CategoryName</p>
+                <p><strong>Date:</strong> @listing.ListingDate.ToShortDateString()</p>
+            </div>
+        }
+    </div>
+}
+
+
+@code {
+    // List to store the products fetched from the API
+    private List<Listing> listings = new();
+
+    // Model for a new listing (linked to the form)
+    private Listing newListing = new();
+
+    // Load all listings when the page is initialized
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadListings();
+    }
+
+    // Fetch listings from the API
+    private async Task LoadListings()
+    {
+        try
+        {
+            // Call the API endpoint to get all listings
+            listings = await Http.GetFromJsonAsync<List<Listing>>("api/Listing/GetAllListings");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading listings: {ex.Message}");
+        }
+    }
+
+    // Submit a new listing to the API
+    private async Task SubmitListing()
+    {
+        try
+        {
+            // Call the API endpoint to add the new listing
+            var response = await Http.PostAsJsonAsync("api/Listing/AddListing", newListing);
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Reload the listings to include the newly added product
+                await LoadListings();
+
+                // Clear the form
+                newListing = new Listing();
+            }
+            else
+            {
+                Console.WriteLine("Error adding product.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error submitting listing: {ex.Message}");
+        }
+    }
+}
