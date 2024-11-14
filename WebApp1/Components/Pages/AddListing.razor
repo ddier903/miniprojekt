@@ -5,7 +5,7 @@
 
 <h3>Add New Listing</h3>
 
-<EditForm Model="listing" OnValidSubmit="HandleValidSubmit" id="addListingForm">
+<EditForm Model="@listing" OnSubmit="@HandleValidSubmit" FormName="kurt">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
@@ -43,9 +43,9 @@
 </EditForm>
 
 @code {
-    private Listing listing = new Listing();
+    private Listing listing { get; set; } = new Listing();
     private List<string> Categories = new() { "Electronics", "Books", "Clothing", "Toys" };
-
+    
     private async Task HandleValidSubmit()
     {
         listing.ListingDate = DateTime.Now;
@@ -56,10 +56,12 @@
 
         if (response.IsSuccessStatusCode)
         {
-            Navigation.NavigateTo("/listings");
+            // Navigate or show success message
+            Navigation.NavigateTo("/");
         }
         else
         {
+            // Handle error (e.g., show message)
             Console.WriteLine("Error adding listing.");
         }
     }
