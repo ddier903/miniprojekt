@@ -1,0 +1,107 @@
+﻿@page "/browse"
+@inject HttpClient Http // Injects the HttpClient to communicate with the API
+@using Core1
+
+<h3>Browse Available Products</h3>
+
+<!-- Search Section -->
+<div class="search-section">
+    <label for="search">Search by Category:</label>
+    <select id="search" @bind="selectedCategory" class="form-control">
+        <option value="">All Categories</option>
+        @foreach (var category in categories)
+        {
+            <option value="@category">@category</option>
+        }
+    </select>
+</div>
+
+<hr />
+
+<!-- Available Products Section -->
+@if (listings == null)
+{
+    <!-- Displays while loading data -->
+    <p>Loading available items...</p>
+}
+else if (filteredItems.Count == 0)
+{
+    <!-- Displays if no items match the filter -->
+    <p>No items found in this category.</p>
+}
+else
+{
+    <!-- Grid layout for displaying all listings -->
+    <div class="product-grid">
+        @foreach (var item in filteredItems)
+        {
+            <div class="product-card">
+                <img src="@item.Image" alt="@item.Name" class="product-image" />
+                <h5>@item.Name</h5>
+                <p>@item.Description</p>
+                <p><strong>Price:</strong> $@item.Price</p>
+                <p><strong>Category:</strong> @item.CategoryName</p>
+                <p><strong>Date:</strong> @item.ListingDate.ToShortDateString()</p>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    // List to store all available items
+    private List<Listing> listings = new();
+
+    // List for filtered items based on the selected category
+    private List<Listing> filteredItems = new();
+
+    // Categories for filtering
+    private List<string> categories = new() { "Electronics", "Books", "Clothing", "Toys" };
+
+    // Selected category for filtering
+    private string selectedCategory = "";
+
+    // Load all available listings when the page is initialized
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadListings();
+    }
+
+    // Fetch listings from the API
+    private async Task LoadListings()
+    {
+        try
+        {
+            // Fetch all active listings from the API
+            listings = await Http.GetFromJsonAsync<List<Listing>>("api/Listing/GetAllListings");
+
+            // Initialize the filtered list
+            FilterItems();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading listings: {ex.Message}");
+        }
+    }
+
+    // Filter items based on the selected category
+    private void FilterItems()
+    {
+        // If no category is selected, display all items
+        if (string.IsNullOrWhiteSpace(selectedCategory))
+        {
+            filteredItems = listings;
+        }
+        else
+        {
+            // Filter listings based on the selected category
+            filteredItems = listings.Where(l => l.CategoryName == selectedCategory).ToList();
+        }
+    }
+
+    // Update the filtered items whenever the selected category changes
+    private void OnCategoryChanged(ChangeEventArgs e)
+    {
+        selectedCategory = e.Value.ToString();
+        FilterItems();
+    }
+}
