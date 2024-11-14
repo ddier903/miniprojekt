@@ -13,21 +13,21 @@ namespace Core1
     {
         public ObjectId ListingID { get; set; }
         [Required]
-        public string Name { get; set; }
+        public string Name { get; set; } = "NO NAME";
         [Required]
-        public int Price { get; set; }
+        public int Price { get; set; } = -12;
         public bool IsActive { get; set; } = true;
         [Required]
-        public string Description { get; set; }
+        public string Description { get; set; } = "desc";
         [Required]
         public DateTime ListingDate { get; set; } = DateTime.Now;
         [Required]
-        public string Image { get; set; }
+        public string Image { get; set; } = "img";
         [Required]
-        public string CategoryName { get; set; }
+        public string CategoryName { get; set; } = "no cat";
 
-        [Required]
-        public ObjectId UserId { get; set; }
+      
+        public ObjectId? UserId { get; set; }
 
     }
 }
