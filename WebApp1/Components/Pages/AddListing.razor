@@ -47,17 +47,19 @@
     private Listing listing = new Listing();
     private List<string> Categories = new() { "Electronics", "Books", "Clothing", "Toys" };
 
-   /* protected override async Task OnInitializedAsync()
-    {
-        // Bind UserId automatically based on logged-in user
-        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
+    /* protected override async Task OnInitializedAsync()
+         {
+         // Bind UserId automatically based on logged-in user
+         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+         var user = authState.User;
 
-        if (user.Identity.IsAuthenticated)
-        {
-            listing.UserId = new ObjectId(user.FindFirst("sub")?.Value);
-        }
-    }*/
+         if (user.Identity.IsAuthenticated)
+             {
+             listing.UserId = new ObjectId(user.FindFirst("sub")?.Value);
+     }
+     }*/
+
+    User user1 = new("Jørgen1","1234","Jørgen","Hansen","Jørgen@gmail.com");
 
     private async Task HandleValidSubmit()
     {
@@ -66,6 +68,7 @@
 
         // Make HTTP POST request to save the listing
         var response = await Http.PostAsJsonAsync("https://localhost:7029/api/Listing/AddListing", listing);
+        user1.AddListing(listing);
 
         if (response.IsSuccessStatusCode)
         {
