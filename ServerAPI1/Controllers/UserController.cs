@@ -13,7 +13,7 @@ namespace ServerAPI1.Controllers;
     [ApiController]
     [Route("/Listing")]
 
-    public class UserController
+    public class UserController : ControllerBase
     {
         UserRepository repository;
         public UserController()

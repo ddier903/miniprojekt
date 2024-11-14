@@ -12,9 +12,9 @@ using Microsoft.AspNetCore.Http.HttpResults;
 namespace ServerAPI1.Controllers;
 
     [ApiController]
-    [Route("/Listing")]
+    [Route("api/[controller]")]
 
-    public class ListingController
+    public class ListingController : ControllerBase
     {
         ListingRepository repository;
         public ListingController()
@@ -36,9 +36,10 @@ namespace ServerAPI1.Controllers;
         public async Task<IActionResult> AddListing(Listing listing)
         {
 
-            await repository.AddListing(listing);
+        await repository.AddListing(listing);
+        return Ok();
 
-        }
+    }
 
         [HttpGet]
         [Route("GetListingByCategory")]
