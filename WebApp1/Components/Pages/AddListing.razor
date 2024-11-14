@@ -3,10 +3,9 @@
 @inject NavigationManager Navigation
 @inject HttpClient Http
 
-
 <h3>Add New Listing</h3>
 
-<EditForm Model="listing" OnValidSubmit="HandleValidSubmit">
+<EditForm Model="listing" OnValidSubmit="HandleValidSubmit" id="addListingForm">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
@@ -47,20 +46,6 @@
     private Listing listing = new Listing();
     private List<string> Categories = new() { "Electronics", "Books", "Clothing", "Toys" };
 
-    /* protected override async Task OnInitializedAsync()
-         {
-         // Bind UserId automatically based on logged-in user
-         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-         var user = authState.User;
-
-         if (user.Identity.IsAuthenticated)
-             {
-             listing.UserId = new ObjectId(user.FindFirst("sub")?.Value);
-     }
-     }*/
-
-    User user1 = new("Jørgen1","1234","Jørgen","Hansen","Jørgen@gmail.com");
-
     private async Task HandleValidSubmit()
     {
         listing.ListingDate = DateTime.Now;
@@ -68,16 +53,13 @@
 
         // Make HTTP POST request to save the listing
         var response = await Http.PostAsJsonAsync("https://localhost:7029/api/Listing/AddListing", listing);
-        user1.AddListing(listing);
 
         if (response.IsSuccessStatusCode)
         {
-            // Navigate or show success message
             Navigation.NavigateTo("/listings");
         }
         else
         {
-            // Handle error (e.g., show message)
             Console.WriteLine("Error adding listing.");
         }
     }
