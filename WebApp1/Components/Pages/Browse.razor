@@ -1,89 +1,66 @@
-﻿@page "/Browse"
+﻿@page "/browse"
 @inject HttpClient Http // Injects the HttpClient to communicate with the API
-@using Core1;
+@using Core1
 
-<h3>Browse Products</h3>
+<h3>Browse Available Products</h3>
 
-<!-- Section for adding a new product -->
-<div>
-    <h4>Add a New Product</h4>
-
-    <!-- Form to add a new listing -->
-    <EditForm Model="@newListing" OnValidSubmit="@SubmitListing">
-        <DataAnnotationsValidator /> <!-- Enables validation based on the Listing class -->
-        <ValidationSummary /> <!-- Displays validation errors -->
-        <!-- Input fields for listing details -->
-        <div>
-            <label>Name:</label>
-            <input @bind="newListing.Name" class="form-control" />
-        </div>
-
-        <div>
-            <label>Price:</label>
-            <input type="number" @bind="newListing.Price" class="form-control" />
-        </div>
-
-        <div>
-            <label>Description:</label>
-            <textarea @bind="newListing.Description" class="form-control"></textarea>
-        </div>
-
-        <div>
-            <label>Category:</label>
-            <input @bind="newListing.CategoryName" class="form-control" />
-        </div>
-
-        <div>
-            <label>Image URL:</label>
-            <input @bind="newListing.Image" class="form-control" />
-        </div>
-
-        <button type="submit" class="btn btn-primary">Add Product</button>
-    </EditForm>
+<!-- Search Section -->
+<div class="search-section">
+    <label for="search">Search by Category:</label>
+    <select id="search" @bind="selectedCategory" class="form-control">
+        <option value="">All Categories</option>
+        @foreach (var category in categories)
+        {
+            <option value="@category">@category</option>
+        }
+    </select>
 </div>
 
 <hr />
 
-<!-- Section for viewing all listings -->
-<h4>Available Products</h4>
-
+<!-- Available Products Section -->
 @if (listings == null)
 {
     <!-- Displays while loading data -->
-    <p>Loading listings...</p>
+    <p>Loading available items...</p>
 }
-else if (listings.Count == 0)
+else if (filteredItems.Count == 0)
 {
-    <!-- Displays if no listings are available -->
-    <p>No listings available.</p>
+    <!-- Displays if no items match the filter -->
+    <p>No items found in this category.</p>
 }
 else
 {
     <!-- Grid layout for displaying all listings -->
     <div class="product-grid">
-        @foreach (var listing in listings)
+        @foreach (var item in filteredItems)
         {
             <div class="product-card">
-                <img src="@listing.Image" alt="@listing.Name" class="product-image" />
-                <h5>@listing.Name</h5>
-                <p>@listing.Description</p>
-                <p><strong>Price:</strong> $@listing.Price</p>
-                <p><strong>Category:</strong> @listing.CategoryName</p>
-                <p><strong>Date:</strong> @listing.ListingDate.ToShortDateString()</p>
+                <img src="@item.Image" alt="@item.Name" class="product-image" />
+                <h5>@item.Name</h5>
+                <p>@item.Description</p>
+                <p><strong>Price:</strong> $@item.Price</p>
+                <p><strong>Category:</strong> @item.CategoryName</p>
+                <p><strong>Date:</strong> @item.ListingDate.ToShortDateString()</p>
             </div>
         }
     </div>
 }
 
-
 @code {
-    // List to store the products fetched from the API
+    // List to store all available items
     private List<Listing> listings = new();
 
-    // Model for a new listing (linked to the form)
-    private Listing newListing = new();
+    // List for filtered items based on the selected category
+    private List<Listing> filteredItems = new();
 
-    // Load all listings when the page is initialized
+    // Categories for filtering
+    private List<string> categories = new() { "Electronics", "Books", "Clothing", "Toys" };
+
+    // Selected category for filtering
+    private string selectedCategory = "";
+
+    // Load all available listings when the page is initialized
     protected override async Task OnInitializedAsync()
     {
         await LoadListings();
@@ -94,8 +71,11 @@ else
     {
         try
         {
-            // Call the API endpoint to get all listings
+            // Fetch all active listings from the API
             listings = await Http.GetFromJsonAsync<List<Listing>>("api/Listing/GetAllListings");
+
+            // Initialize the filtered list
+            FilterItems();
         }
         catch (Exception ex)
         {
@@ -103,30 +83,25 @@ else
         }
     }
 
-    // Submit a new listing to the API
-    private async Task SubmitListing()
+    // Filter items based on the selected category
+    private void FilterItems()
     {
-        try
+        // If no category is selected, display all items
+        if (string.IsNullOrWhiteSpace(selectedCategory))
         {
-            // Call the API endpoint to add the new listing
-            var response = await Http.PostAsJsonAsync("api/Listing/AddListing", newListing);
-
-            if (response.IsSuccessStatusCode)
-            {
-                // Reload the listings to include the newly added product
-                await LoadListings();
-
-                // Clear the form
-                newListing = new Listing();
-            }
-            else
-            {
-                Console.WriteLine("Error adding product.");
-            }
+            filteredItems = listings;
         }
-        catch (Exception ex)
+        else
         {
-            Console.WriteLine($"Error submitting listing: {ex.Message}");
+            // Filter listings based on the selected category
+            filteredItems = listings.Where(l => l.CategoryName == selectedCategory).ToList();
         }
+    }
+
+    // Update the filtered items whenever the selected category changes
+    private void OnCategoryChanged(ChangeEventArgs e)
+    {
+        selectedCategory = e.Value.ToString();
+        FilterItems();
     }
 }
