@@ -7,13 +7,14 @@ using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace ServerAPI1.Controllers;
 
     [ApiController]
-    [Route("/Listing")]
+    [Route("api/[controller]")]
 
-    public class ListingController
+    public class ListingController : ControllerBase
     {
         ListingRepository repository;
         public ListingController()
@@ -24,42 +25,43 @@ namespace ServerAPI1.Controllers;
         [HttpGet]
         [Route("GetAllListings")]
         //Henter alle Listings fra repository:
-        public IEnumerable<Listing> GetAllListings()
+        public async Task <IEnumerable<Listing>> GetAllListings()
         {
-            return (IEnumerable<Listing>)repository.GetAllActiveListings();
+            return await repository.GetAllActiveListings();
         }
 
         //Tilføjer ny Listing til repository:
         [HttpPost]
         [Route("AddListing")]
-        public async Task AddListing(Listing listing)
+        public async Task<IActionResult> AddListing(Listing listing)
         {
 
-            await repository.AddListing(listing);
+        await repository.AddListing(listing);
+        return Ok();
 
-            //Mangler mere logik
-        }
+    }
+
         [HttpGet]
         [Route("GetListingByCategory")]
         //Viser listings filtreret på category.
-        public IEnumerable<Listing> GetListingByCategory(string category)
+        public async Task <IEnumerable<Listing>> GetListingByCategory(string category)
         {
-            return (IEnumerable<Listing>)repository.GetListingByCategory(category);
+            return await repository.GetListingByCategory(category);
         }
         [HttpGet]
         [Route("GetListingByPriceDesc")]
         //Viser lisings sorteret efter pris faldende.
 
-        public IEnumerable<Listing> GetListingByPriceDescending()
+        public async Task <IEnumerable<Listing>> GetListingByPriceDescending()
         {
-            return (IEnumerable<Listing>)repository.GetListingByPriceDescending();
+            return await repository.GetListingByPriceDescending();
         }
         [HttpGet]
         [Route("GetListingByPriceAsc")]
         //Viser listings sorteret efter pris stigende.
-        public IEnumerable<Listing> GetListingByPriceAscending()
+        public async Task <IEnumerable<Listing>> GetListingByPriceAscending()
         {
-            return (IEnumerable<Listing>)repository.GetListingByPriceAscending();
+            return await repository.GetListingByPriceAscending();
         }
 
         //Viser Listings filteret efter søgeord:
@@ -69,9 +71,9 @@ namespace ServerAPI1.Controllers;
 
         //Viser Aktive listings for en specifik bruger:
 
-        public IEnumerable<Listing> GetActiveListingsByUser(ObjectId userid)
+        public async Task <IEnumerable<Listing>> GetActiveListingsByUser(ObjectId userid)
         {
-            return (IEnumerable<Listing>)repository.GetActiveListingsByUser(userid);
+            return await repository.GetActiveListingsByUser(userid);
         }
     }
 

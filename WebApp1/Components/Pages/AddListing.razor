@@ -1,0 +1,84 @@
+﻿@page "/addlisting"
+@using Core1
+@inject NavigationManager Navigation
+@inject HttpClient Http
+
+
+<h3>Add New Listing</h3>
+
+<EditForm Model="listing" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="name">Name</label>
+        <InputText id="name" class="form-control" @bind-Value="listing.Name" />
+    </div>
+
+    <div class="form-group">
+        <label for="price">Price</label>
+        <InputNumber id="price" class="form-control" @bind-Value="listing.Price" />
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <InputTextArea id="description" class="form-control" @bind-Value="listing.Description" />
+    </div>
+
+    <div class="form-group">
+        <label for="image">Image URL</label>
+        <InputText id="image" class="form-control" @bind-Value="listing.Image" />
+    </div>
+
+    <div class="form-group">
+        <label for="category">Category</label>
+        <InputSelect id="category" class="form-control" @bind-Value="listing.CategoryName">
+            @foreach (var category in Categories)
+            {
+                <option value="@category">@category</option>
+            }
+        </InputSelect>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+@code {
+    private Listing listing = new Listing();
+    private List<string> Categories = new() { "Electronics", "Books", "Clothing", "Toys" };
+
+    /* protected override async Task OnInitializedAsync()
+         {
+         // Bind UserId automatically based on logged-in user
+         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+         var user = authState.User;
+
+         if (user.Identity.IsAuthenticated)
+             {
+             listing.UserId = new ObjectId(user.FindFirst("sub")?.Value);
+     }
+     }*/
+
+    User user1 = new("Jørgen1","1234","Jørgen","Hansen","Jørgen@gmail.com");
+
+    private async Task HandleValidSubmit()
+    {
+        listing.ListingDate = DateTime.Now;
+        listing.IsActive = true;
+
+        // Make HTTP POST request to save the listing
+        var response = await Http.PostAsJsonAsync("https://localhost:7029/api/Listing/AddListing", listing);
+        user1.AddListing(listing);
+
+        if (response.IsSuccessStatusCode)
+        {
+            // Navigate or show success message
+            Navigation.NavigateTo("/listings");
+        }
+        else
+        {
+            // Handle error (e.g., show message)
+            Console.WriteLine("Error adding listing.");
+        }
+    }
+}
